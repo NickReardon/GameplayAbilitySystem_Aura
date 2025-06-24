@@ -5,11 +5,19 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interaction/EnemyInterface.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -57,5 +65,73 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
 	
+
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+	
+	LastActor = ThisActor;
+	ThisActor = CursorHit.GetActor();
+
+
+
+	
+	/*
+	 * A. LastActor is not valid and ThisActor is null
+	 * - do nothing
+	 *
+	 * B. LastActor is not valid and ThisActor is valid
+	 * - highlight ThisActor
+	 *
+	 * C. LastActor is valid and ThisActor is null
+	 *  - unhighlight LastActor
+	 *
+	 *  D. Both valid and different
+	 *	- unhighlight LastActor
+	 *	- highlight ThisActor
+	 *
+	 * E. Both valid and the same
+	 * - do nothing
+	 */
+
+	if (LastActor == nullptr)
+	{
+		if (ThisActor == nullptr)
+		{
+			// Case A
+			return;
+		}
+		else
+		{
+			ThisActor->HighlightActor();
+			// Case B
+		}
+	}
+	else
+	{
+		if (ThisActor == nullptr)
+		{
+			LastActor->UnhighlightActor();
+			// Case C
+		}
+		else
+		{
+			if (LastActor != ThisActor)
+			{
+				LastActor->UnhighlightActor();
+				ThisActor->HighlightActor();
+				// Case D
+			}
+			else
+			{
+				// Case E
+				return;
+			}
+		}
+	}
 
 }

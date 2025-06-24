@@ -7,6 +7,7 @@
 #include "Interaction/EnemyInterface.h"
 #include "AuraEnemy.generated.h"
 
+
 /**
  * 
  */
@@ -14,7 +15,10 @@ UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacter, public IEnemyInterface
 {
 	GENERATED_BODY()
-
+public:
 	virtual void HighlightActor() override;
 	virtual void UnhighlightActor() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bHighlighted = false;
 };
