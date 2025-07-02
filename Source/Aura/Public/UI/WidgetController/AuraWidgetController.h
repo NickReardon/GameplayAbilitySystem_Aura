@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "AuraWidgetController.generated.h"
 
+class UAttributeSet;
+class UAbilitySystemComponent;
 /**
  * 
  */
