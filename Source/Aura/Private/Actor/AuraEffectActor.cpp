@@ -27,7 +27,8 @@ void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	{
 		const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
 		UAuraAttributeSet* MutableAuraAttributeSet= const_cast<UAuraAttributeSet*>(AuraAttributeSet);
-		MutableAuraAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.0f);
+		MutableAuraAttributeSet->SetHealth(FMath::Max(0.0f, AuraAttributeSet->GetHealth() - 25.0f));
+		MutableAuraAttributeSet->SetMana(FMath::Max(0.0f, AuraAttributeSet->GetMana() - 25.0f));
 		Destroy();
 	}
 
@@ -45,4 +46,3 @@ void AAuraEffectActor::BeginPlay()
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::OnOverlap);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AAuraEffectActor::OnEndOverlap);
 }
-
