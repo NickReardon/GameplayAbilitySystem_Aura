@@ -22,6 +22,48 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 }
 
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	// Epic recommendation to only use PreAttributeChange for validation and clamping
+	
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	// Health attributes ---------------------------
+	if (Attribute == GetHealthAttribute())
+	{
+		// Ensure health does not exceed max health
+		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxHealth());
+
+		
+		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), GetHealth());
+	}
+	if (Attribute == GetMaxHealthAttribute())
+	{
+		// Ensure max health is not less than current health
+
+
+		
+		UE_LOG(LogTemp, Warning, TEXT("Max Health: %f"), GetMaxHealth());
+	}
+
+	// Mana attributes ---------------------------
+	if (Attribute == GetManaAttribute())
+	{
+		// Ensure mana does not exceed max mana
+		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
+		
+		UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), GetMana());
+	}
+	if (Attribute == GetMaxManaAttribute())
+	{
+		// Ensure max mana is not less than current mana
+
+
+		
+		UE_LOG(LogTemp, Warning, TEXT("Max Mana: %f"), GetMaxMana());
+	}
+}
+
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Health, OldHealth);

@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h"
 #include "AuraEffectActor.generated.h"
 
+class UAbilitySystemComponent;
 class UGameplayEffect;
 
 UENUM(BlueprintType)
@@ -35,7 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GameplayEffectClass) const;
+	void ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GameplayEffectClass);
 
 	UFUNCTION(BlueprintCallable)
 	void OnOverlap(AActor* TargetActor);
@@ -47,21 +50,21 @@ protected:
 	bool bDestroyOnEffectRemoval = false;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InstantGameplayEffectClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
 	EEffectApplicationPolicy InstantEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> DurationGameplayEffectClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
 	EEffectApplicationPolicy DurationEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InfiniteGameplayEffectClass;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
 	EEffectApplicationPolicy InfiniteEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
@@ -69,5 +72,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Applied Effects")
 	EEffectRemovalPolicy InfiniteEffectRemovalPolicy = EEffectRemovalPolicy::RemoveOnEndOverlap;
 
+	// Alternative approach using handles (commented out - tutorial approach)
+	// This approach stores effect handles to allow for more granular control over effect removal
+	// TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 
 };
