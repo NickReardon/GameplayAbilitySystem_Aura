@@ -76,4 +76,7 @@ protected:
 	// This approach stores effect handles to allow for more granular control over effect removal
 	// TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effects")
+	float ActorLevel = 1.f;
+
 };
