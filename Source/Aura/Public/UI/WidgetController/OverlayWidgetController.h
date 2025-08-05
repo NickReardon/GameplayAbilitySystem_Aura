@@ -7,14 +7,6 @@
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
-class UAuraUserWidget;
-struct FOnAttributeChangeData;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, NewMaxMana);
-
 USTRUCT( BlueprintType)
 struct FUIWidgetRow: public FTableRowBase
 {
@@ -27,12 +19,23 @@ struct FUIWidgetRow: public FTableRowBase
 	FText Message = FText();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|WidgetRow")
-	TSubclassOf<UAuraUserWidget> MessageWidget;
+	TSubclassOf<class UAuraUserWidget> MessageWidget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI|WidgetRow")
 	UTexture2D* Image = nullptr;
 	
 };
+
+class UAuraUserWidget;
+struct FOnAttributeChangeData;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, NewMaxMana);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowSignature, FUIWidgetRow, Row);
+
+
 
 
 /**
@@ -60,6 +63,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FOnMaxManaChangedSignature OnMaxManaChanged;
 
+	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
+	FOnMessageWidgetRowSignature MessageWidgetRowDelegate;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
@@ -71,12 +77,12 @@ protected:
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
 
 	template<typename T>
-	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag) const;
+	static T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 
 };
 
 template <typename T>
-T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag) const
+T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
 {
 	return DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
 }
