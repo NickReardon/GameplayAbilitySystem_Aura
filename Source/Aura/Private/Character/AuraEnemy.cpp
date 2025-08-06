@@ -5,6 +5,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
+#include "Player/AuraPlayerState.h"
 
 
 AAuraEnemy::AAuraEnemy()
@@ -35,7 +36,14 @@ void AAuraEnemy::UnhighlightActor()
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	check(AbilitySystemComponent); // Not strictly necessary, created in constructor
+
+	InitAbilityActorInfo();
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	
 }

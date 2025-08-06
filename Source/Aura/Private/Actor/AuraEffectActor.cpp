@@ -55,45 +55,54 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassO
 
 void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
-	UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
-	if (!IsValid(TargetAbilitySystemComponent)) return;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnOverlap"));
+	const UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	if (!IsValid(TargetAbilitySystemComponent))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("TargetAbilitySystemComponent is invalid"));
+		return;
+	}
 	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto InstantEffectClass : InstantGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> InstantEffectClass : InstantGameplayEffectClass)
 			ApplyEffectToTarget(TargetActor, InstantEffectClass);
 	}
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto DurationEffectClass : DurationGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> DurationEffectClass : DurationGameplayEffectClass)
 			ApplyEffectToTarget(TargetActor, DurationEffectClass);
 	}
 	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
-		for (auto InfiniteEffectClass : InfiniteGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> InfiniteEffectClass : InfiniteGameplayEffectClass)
 			ApplyEffectToTarget(TargetActor, InfiniteEffectClass);
 	}
 }
 
 void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnEndOverlap"));
 	UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
-	if (!IsValid(TargetAbilitySystemComponent)) return;
-	
+	if (!IsValid(TargetAbilitySystemComponent))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("TargetAbilitySystemComponent is invalid"));
+		return;
+	}
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		for (auto InstantEffect : InstantGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> InstantEffect : InstantGameplayEffectClass)
 			ApplyEffectToTarget(TargetActor, InstantEffect);
 	}
 	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		for (auto DurationEffect : DurationGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> DurationEffect : DurationGameplayEffectClass)
 			ApplyEffectToTarget(TargetActor, DurationEffect);
 	}
 
 	if (InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{
-		for (auto InfiniteEffect : InfiniteGameplayEffectClass)
+		for (const TSubclassOf<UGameplayEffect> InfiniteEffect : InfiniteGameplayEffectClass)
 			TargetAbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(InfiniteEffect, UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(this), 1);
 	}
 	
