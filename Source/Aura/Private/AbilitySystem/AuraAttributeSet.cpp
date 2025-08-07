@@ -10,11 +10,9 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitMaxHealth(100.0f);
-	InitHealth(50.0f);
+	InitHealth(GetMaxHealth()/2.f);
 
-	InitMaxMana(100.0f);
-	InitMana(GetMaxMana());
+	InitMana(GetMaxMana()/2.f);
 }
 
 
@@ -34,14 +32,6 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 		
 		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), GetHealth());
 	}
-	if (Attribute == GetMaxHealthAttribute())
-	{
-		// Ensure health does not exceed max health
-		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxHealth());
-
-		
-		UE_LOG(LogTemp, Warning, TEXT("Max Health: %f"), GetMaxHealth());
-	}
 
 	// Mana attributes ---------------------------
 	if (Attribute == GetManaAttribute())
@@ -50,14 +40,6 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
 		
 		UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), GetMana());
-	}
-	if (Attribute == GetMaxManaAttribute())
-	{
-		// Ensure max mana is not less than current mana
-
-
-		
-		UE_LOG(LogTemp, Warning, TEXT("Max Mana: %f"), GetMaxMana());
 	}
 
 

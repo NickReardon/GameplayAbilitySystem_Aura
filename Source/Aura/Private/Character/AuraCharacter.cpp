@@ -55,14 +55,6 @@ void AAuraCharacter::InitAbilityActorInfo()
 		}
 	}
 	
-	if (AbilitySystemComponent)
-	{
-		InitializePrimaryAttributes();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent is not set for %s"), *GetName());
-	}
-	
+	InitializeDefaultAttributes();
 }
 

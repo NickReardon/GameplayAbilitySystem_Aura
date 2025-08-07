@@ -24,24 +24,25 @@ void AAuraCharacterBase::BeginPlay()
 
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
+	
 }
 
-void AAuraCharacterBase::InitializePrimaryAttributes() const
-{	
-	if (!DefaultPrimaryAttributes)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("DefaultPrimaryAttributes is not set for %s"), *GetName());
-		return;
-	}
-	if (UAbilitySystemComponent* ASC = GetAbilitySystemComponent())
-	{
-		const FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
-		const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.0f, EffectContextHandle);
-		ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent is not set for %s"), *GetName());
-	}
+
+void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const
+{
+	check(GameplayEffectClass)
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	check(ASC);
+	const FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
+	const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContextHandle);
+	ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
+	
 }
+
+void AAuraCharacterBase::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
+}
+
 
