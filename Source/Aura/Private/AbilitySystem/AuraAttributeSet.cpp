@@ -90,30 +90,26 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		const float OldHealth = GetHealth();
-		const float NewHealth = GetHealth() + Data.EvaluatedData.Magnitude;
-		SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
+		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+		//UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute - Health: %f"), GetHealth());
 	}
 	if (Data.EvaluatedData.Attribute == GetMaxHealthAttribute())
 	{
-		const float OldMaxHealth = GetMaxHealth();
-		const float NewMaxHealth = GetMaxHealth() + Data.EvaluatedData.Magnitude;
-		SetMaxHealth(FMath::Clamp(NewMaxHealth, 0.0f, FLT_MAX));
+		SetMaxHealth(FMath::Clamp(GetMaxHealth(), 0.0f, FLT_MAX));
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+		//UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute - Health: %f"), GetHealth());
 	}
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
-		const float OldMana = GetMana();
-		const float NewMana = GetMana() + Data.EvaluatedData.Magnitude;
-		SetMana(FMath::Clamp(NewMana, 0.0f, GetMaxMana()));
+		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+		//UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute - Mana: %f"), GetMana());
 	}
 	if (Data.EvaluatedData.Attribute == GetMaxManaAttribute())
 	{
-		const float OldMaxMana = GetMaxMana();
-		const float NewMaxMana = GetMaxMana() + Data.EvaluatedData.Magnitude;
-		SetMaxMana(FMath::Clamp(NewMaxMana, 0.0f, FLT_MAX));
+		SetMaxMana(FMath::Clamp(GetMaxMana(), 0.0f, FLT_MAX));
 		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+		//UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute - Max Mana: %f"), GetMaxMana());
 	}
 }
 
