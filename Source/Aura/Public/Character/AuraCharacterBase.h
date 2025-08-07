@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "GameFramework/Character.h"
 #include "AuraCharacterBase.generated.h"
 
@@ -36,5 +37,9 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+	
+	void InitializePrimaryAttributes() const;
 	
 };
