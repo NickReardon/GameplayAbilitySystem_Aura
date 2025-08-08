@@ -10,9 +10,7 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitHealth(GetMaxHealth()/2.f);
 
-	InitMana(GetMaxMana()/2.f);
 }
 
 
@@ -77,8 +75,10 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 }
 
-
-#pragma region [AttributeReplication]
+// Attribute Replication
+// This section is used to replicate attributes to clients
+// It uses the DOREPLIFETIME_CONDITION_NOTIFY macro to specify which attributes should be replicated
+#pragma region  AttributeReplication
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
