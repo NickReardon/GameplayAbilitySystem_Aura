@@ -35,6 +35,8 @@ float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectS
 	// Calculate Max Mana based on Intelligence and Player Level
 	// Base mana is 50, plus 2 per Intelligence, plus 1 per Player Level
 	// This gives a base mana of 50, plus 2 per Intelligence, plus 1 per Player Level
-	// Example: Intelligence 10, Player Level 5 = 50 + (10 * 2) + (5 * 1) = 50 + 20 + 5 = 75
+	// Base mana is 50, plus 2.5 per Intelligence, plus 15 per Player Level
+	// This gives a base mana of 50, plus 2.5 per Intelligence, plus 15 per Player Level
+	// Example: Intelligence 10, Player Level 5 = 50 + (10 * 2.5) + (5 * 15) = 50 + 25 + 75 = 150
 	return 50.f + (Intelligence * 2.5f) + 15.f * PlayerLevel;
 }
