@@ -34,7 +34,7 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
 	
 	// Calculate Max Health based on Vigor and Player Level
 	// Base health is 80, plus 2.5 per Vigor, plus 10 per Player Level
-	// This gives a base health of 80, plus 2 per Vigor, plus 10 per Player Level
+	// This gives a base health of 80, plus 2.5 per Vigor, plus 10 per Player Level
 	// Example: Vigor 10, Player Level 5 = 80 + (10 * 2.5) + (5 * 10) = 80 + 25 + 50 = 155
 	return 80.f + (Vigor * 2.5f) + 10.f * PlayerLevel;
 }
