@@ -30,6 +30,7 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
 	Vigor = FMath::Max<float>(Vigor, 0.f);
 	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
+	check(CombatInterface);
 	const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
 	
 	// Calculate Max Health based on Vigor and Player Level

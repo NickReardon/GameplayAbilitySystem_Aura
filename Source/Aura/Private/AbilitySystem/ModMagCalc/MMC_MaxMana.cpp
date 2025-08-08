@@ -30,6 +30,7 @@ float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectS
 	Intelligence = FMath::Max<float>(Intelligence, 0.f);
 	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
+	check(CombatInterface);
 	const int32 PlayerLevel = CombatInterface->GetPlayerLevel();
 	
 	// Calculate Max Mana based on Intelligence and Player Level
