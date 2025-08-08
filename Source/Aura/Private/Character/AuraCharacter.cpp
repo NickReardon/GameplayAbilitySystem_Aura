@@ -36,6 +36,7 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	// Init ability actor info for the server
