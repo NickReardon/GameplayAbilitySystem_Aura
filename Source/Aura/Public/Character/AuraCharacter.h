@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
-#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Player/AuraPlayerState.h"
 #include "AuraCharacter.generated.h"
 
