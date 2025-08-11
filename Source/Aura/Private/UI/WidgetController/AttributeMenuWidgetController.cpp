@@ -26,4 +26,5 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 	
 	AttributeInfoDelegate.Broadcast(Info);
 	
+	
 }
