@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UI/WidgetController/AuraWidgetController.h"
+#include "GameplayTagContainer.h"
 #include "AttributeMenuWidgetController.generated.h"
 
+
+struct FGameplayAttribute;
 class UAttributeInfo;
 struct FAuraAttributeInfo;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FAuraAttributeInfo&, AttributeInfo);
@@ -30,4 +33,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UAttributeInfo> AttributeInfo;
+	
+private:
+	void BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const;
 };

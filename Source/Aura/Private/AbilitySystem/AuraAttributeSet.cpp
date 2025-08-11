@@ -12,11 +12,13 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	// Initialize primary attributes
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_STRENGTH.GetTag(), &UAuraAttributeSet::GetStrengthAttribute);
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_INTELLIGENCE.GetTag(), &UAuraAttributeSet::GetIntelligenceAttribute);
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_RESILIENCE.GetTag(), &UAuraAttributeSet::GetResilienceAttribute);
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_VIGOR.GetTag(), &UAuraAttributeSet::GetVigorAttribute);	
 	
+	// Initialize secondary attributes
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_ARMOR.GetTag(), &UAuraAttributeSet::GetArmorAttribute);
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_ARMORPENETRATION.GetTag(), &UAuraAttributeSet::GetArmorPenetrationAttribute);
 	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_BLOCKCHANCE.GetTag(), &UAuraAttributeSet::GetBlockChanceAttribute);
