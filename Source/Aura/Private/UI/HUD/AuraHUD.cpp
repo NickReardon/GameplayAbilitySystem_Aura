@@ -14,8 +14,9 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParameters(Parameters);
-		OverlayWidgetController->BindCallbacksToDependencies();
 	}
+	
+	OverlayWidgetController->BindCallbacksToDependencies();
 
 	return OverlayWidgetController;
 }
@@ -44,9 +45,10 @@ UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(
 	{
 		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
 		AttributeMenuWidgetController->SetWidgetControllerParameters(Parameters);
-		AttributeMenuWidgetController->BindCallbacksToDependencies();
 	}
 	
+	AttributeMenuWidgetController->BindCallbacksToDependencies();
+
 	return AttributeMenuWidgetController;
 }
 
