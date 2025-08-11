@@ -21,10 +21,11 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 	
 	checkf(AttributeInfo, TEXT("AttributeInfo uninitialized. Please fill out BP_AttributeMenuWidgetController in the editor."));
 	
-	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_STRENGTH, true);
-	Info.AttributeValue = AS->GetStrength();
-	
-	AttributeInfoDelegate.Broadcast(Info);
-	
-	
+	for (TPair<FGameplayTag, FGameplayAttribute(*)()>& Pair : AS->TagsToAttributes)
+	{
+		FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key, true); // Contains the attribute tag, name, description, and default value
+		Info.AttributeValue = Pair.Value().GetNumericValue(AS); // Get the current value of the attribute from the AttributeSet
+
+		AttributeInfoDelegate.Broadcast(Info);
+	}
 }

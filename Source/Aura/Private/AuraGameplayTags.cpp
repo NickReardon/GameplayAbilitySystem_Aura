@@ -29,8 +29,8 @@ namespace AuraGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_SECONDARY_CRITICALHITRESISTANCE, "Attributes.Secondary.CriticalHitResistance", "Reduces critical hit chance of attacking enemies");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_SECONDARY_HEALTHREGENERATION, "Attributes.Secondary.HealthRegeneration", "Amount of health regenerated every 1 second");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_SECONDARY_MANAREGENERATION, "Attributes.Secondary.ManaRegeneration", "Amount of mana regenerated every 1 second");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_VITAL_MAXHEALTH, "Attributes.Secondary.MaxHealth", "Maximum amount of health obtainable");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_VITAL_MAXMANA, "Attributes.Secondary.MaxMana", "Maximum amount of mana obtainable");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_SECONDARY_MAXHEALTH, "Attributes.Secondary.MaxHealth", "Maximum amount of health obtainable");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_SECONDARY_MAXMANA, "Attributes.Secondary.MaxMana", "Maximum amount of mana obtainable");
 
 	// Vital Attributes
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_VITAL_HEALTH, "Attributes.Vital.Health", "Amount of damage a player can take before death");

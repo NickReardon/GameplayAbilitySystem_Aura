@@ -4,13 +4,30 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
+#include "AuraGameplayTags.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_STRENGTH.GetTag(), &UAuraAttributeSet::GetStrengthAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_INTELLIGENCE.GetTag(), &UAuraAttributeSet::GetIntelligenceAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_RESILIENCE.GetTag(), &UAuraAttributeSet::GetResilienceAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_PRIMARY_VIGOR.GetTag(), &UAuraAttributeSet::GetVigorAttribute);	
+	
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_ARMOR.GetTag(), &UAuraAttributeSet::GetArmorAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_ARMORPENETRATION.GetTag(), &UAuraAttributeSet::GetArmorPenetrationAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_BLOCKCHANCE.GetTag(), &UAuraAttributeSet::GetBlockChanceAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_CRITICALHITCHANCE.GetTag(), &UAuraAttributeSet::GetCriticalHitChanceAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_CRITICALHITDAMAGE.GetTag(), &UAuraAttributeSet::GetCriticalHitDamageAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_CRITICALHITRESISTANCE.GetTag(), &UAuraAttributeSet::GetCriticalHitResistanceAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_HEALTHREGENERATION.GetTag(), &UAuraAttributeSet::GetHealthRegenerationAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_MANAREGENERATION.GetTag(), &UAuraAttributeSet::GetManaRegenerationAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_MAXHEALTH.GetTag(), &UAuraAttributeSet::GetMaxHealthAttribute);
+	TagsToAttributes.Add(AuraGameplayTags::TAG_ATTRIBUTES_SECONDARY_MAXMANA.GetTag(), &UAuraAttributeSet::GetMaxManaAttribute);
+	
 }
 
 
