@@ -22,11 +22,33 @@ AAuraPlayerController::AAuraPlayerController()
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
+
+
 void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
+
+	if (bAutoRunning) AutoRun();
+
+	GEngine->AddOnScreenDebugMessage(20, 1.0f, FColor::Red, FString::Printf(TEXT("FollowTime: %f"), FollowTime));
+}
+
+void AAuraPlayerController::AutoRun()
+{
+	if (APawn* ControlledPawn = GetPawn())
+	{
+		const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+		ControlledPawn->AddMovementInput(Direction);
+
+		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)
+		{
+			bAutoRunning = false;
+		}
+	}
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -180,19 +202,46 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 	}
 	else
 	{
-		APawn* ControlledPawn = GetPawn();
-		if (FollowTime <= ShortPressThreshold && ControlledPawn)
+		if (FollowTime <= ShortPressThreshold)
 		{
-			UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this,ControlledPawn->GetActorLocation(),CachedDestination);
-			checkf(NavPath, TEXT("Failed to find path to location synchronously. Check if the navigation system is set up correctly. Is the NavMesh built?"));
-
-			Spline->ClearSplinePoints();
-			for (const FVector& Point : NavPath->PathPoints)
+			APawn* ControlledPawn = GetPawn();
+			if (ControlledPawn)
 			{
-				Spline->AddSplinePoint(Point, ESplineCoordinateSpace::World);
-				DrawDebugSphere(GetWorld(), Point, 8.0f, 10, FColor::Green, false, 5.0f);
+				FHitResult NavChannelCursorHitResult;
+				GetHitResultUnderCursor(ECC_GameTraceChannel1, false, NavChannelCursorHitResult);
+				if (NavChannelCursorHitResult.bBlockingHit)
+				{
+					// Projecting a point from the cursor impact point to the NavMesh with a larger-than-default
+					// Query Extent, so there are better chances to reach for the NavMesh and return a point,
+					// then generating a path from the pawn location to this point (only if found).
+     
+					FNavLocation ImpactPointNavLocation;
+					// NOTE: Default Query Extend = FVector(50.0f, 50.0f, 250.0f)
+					const FVector QueryingExtent = FVector(400.0f, 400.0f, 250.0f);
+					const FNavAgentProperties& NavAgentProps = GetNavAgentPropertiesRef();
+					UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+					const bool bNavLocationFound = NavSystem->ProjectPointToNavigation(NavChannelCursorHitResult.ImpactPoint, ImpactPointNavLocation, QueryingExtent, &NavAgentProps);
+					
+					if (bNavLocationFound && ((ImpactPointNavLocation.Location - ControlledPawn->GetActorLocation()).Length() > AutoRunAcceptanceRadius))
+					{
+						UNavigationPath* NavigationPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), ImpactPointNavLocation);
+						if (NavigationPath && NavigationPath->PathPoints.Num() > 0)
+						{
+							Spline->ClearSplinePoints();
+							for (const FVector& PathPoint : NavigationPath->PathPoints)
+							{
+								Spline->AddSplinePoint(PathPoint, ESplineCoordinateSpace::World);
+								DrawDebugSphere(GetWorld(), PathPoint, 5.0f, 12, FColor::Green, false, 3.0f);
+							}
+							
+							CachedDestination = NavigationPath->PathPoints.Last();
+							DrawDebugSphere(GetWorld(), CachedDestination, AutoRunAcceptanceRadius, 12, FColor::Red, false, 3.0f);
+							bAutoRunning = true;
+						}
+						
+					}
+				}       
 			}
-			bAutoRunning = true;
 
 		}
 		FollowTime = 0.0f;
@@ -231,8 +280,15 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 		if (APawn* ControlledPawn = GetPawn<APawn>())
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-			ControlledPawn->AddMovementInput(WorldDirection);
+			if ((CachedDestination - ControlledPawn->GetActorLocation()).Length() > AutoRunAcceptanceRadius)
+			{
+				// Only add movement input if the destination is far enough away
+				// This prevents the player from moving when they are already close to the destination
+				ControlledPawn->AddMovementInput(WorldDirection);
+			}
 		}
+
+		
 	}
 	
 }

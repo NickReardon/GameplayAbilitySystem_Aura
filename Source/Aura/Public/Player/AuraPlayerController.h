@@ -24,6 +24,7 @@ class AURA_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
+	void AutoRun();
 	virtual void PlayerTick(float DeltaTime) override;
 	
 protected:
