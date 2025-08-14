@@ -32,7 +32,6 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 
 	if (bAutoRunning) AutoRun();
 
-	GEngine->AddOnScreenDebugMessage(20, 1.0f, FColor::Red, FString::Printf(TEXT("FollowTime: %f"), FollowTime));
 }
 
 void AAuraPlayerController::AutoRun()
@@ -107,68 +106,17 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 	if (!CursorHit.bBlockingHit) return;
 	
 	LastActor = ThisActor;
 	ThisActor = CursorHit.GetActor();
-
-
-
 	
-	/*
-	 * A. LastActor is not valid and ThisActor is null
-	 * - do nothing
-	 *
-	 * B. LastActor is not valid and ThisActor is valid
-	 * - highlight ThisActor
-	 *
-	 * C. LastActor is valid and ThisActor is null
-	 *  - unhighlight LastActor
-	 *
-	 *  D. Both valid and different
-	 *	- unhighlight LastActor
-	 *	- highlight ThisActor
-	 *
-	 * E. Both valid and the same
-	 * - do nothing
-	 */
 
-	if (LastActor == nullptr)
+	if (LastActor != ThisActor)
 	{
-		if (ThisActor == nullptr)
-		{
-			// Case A
-			return;
-		}
-		else
-		{
-			ThisActor->HighlightActor();
-			// Case B
-		}
-	}
-	else
-	{
-		if (ThisActor == nullptr)
-		{
-			LastActor->UnhighlightActor();
-			// Case C
-		}
-		else
-		{
-			if (LastActor != ThisActor)
-			{
-				LastActor->UnhighlightActor();
-				ThisActor->HighlightActor();
-				// Case D
-			}
-			else
-			{
-				// Case E
-				return;
-			}
-		}
+		if (LastActor) LastActor->UnhighlightActor();
+		if (ThisActor) ThisActor->HighlightActor();
 	}
 
 }
@@ -181,24 +129,19 @@ void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
 		bAutoRunning = false;
 	}
 
-}
+} 
 
 void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB))
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+
 		return;
 	}
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 	else
 	{
@@ -231,11 +174,9 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 							for (const FVector& PathPoint : NavigationPath->PathPoints)
 							{
 								Spline->AddSplinePoint(PathPoint, ESplineCoordinateSpace::World);
-								DrawDebugSphere(GetWorld(), PathPoint, 5.0f, 12, FColor::Green, false, 3.0f);
 							}
 							
 							CachedDestination = NavigationPath->PathPoints.Last();
-							DrawDebugSphere(GetWorld(), CachedDestination, AutoRunAcceptanceRadius, 12, FColor::Red, false, 3.0f);
 							bAutoRunning = true;
 						}
 						
@@ -253,19 +194,13 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB))
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+
 		return;
 	}
-
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 	else
 	{
