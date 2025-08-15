@@ -51,9 +51,26 @@ void AAuraCharacterBase::InitializeDefaultAttributes() const
 void AAuraCharacterBase::AddCharacterAbilities()
 {
 	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-	if (!HasAuthority()) return;
-	
+	if (!HasAuthority())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AddCharacterAbilities can only be called on the server!"));
+		return;
+	}
 	AuraASC->AddCharacterAbilities(StartupAbilities);
+
+	for (auto& Ability : AuraASC->GetActivatableAbilities())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Ability: %s"), *Ability.GetDebugString()));
+	}
+
+	TArray<FGameplayAbilitySpecHandle> AbilityHandles;
+	AuraASC->GetAllAbilities(AbilityHandles);
+	for (auto& Ability : AbilityHandles)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Ability: %s"), *Ability.ToString()));
+	}
+
+
 }
 
 

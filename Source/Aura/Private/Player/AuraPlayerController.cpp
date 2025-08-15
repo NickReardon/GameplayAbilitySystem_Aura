@@ -123,7 +123,7 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
 {
-	if (InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB))
+	if (InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB.GetTag()))
 	{
 		bTargeting = ThisActor ? true : false;
 		bAutoRunning = false;
@@ -133,7 +133,7 @@ void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 {
-	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB))
+	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB.GetTag()))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 
@@ -194,7 +194,7 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 {
-	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB))
+	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB.GetTag()))
 	{
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 
@@ -202,7 +202,7 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 	}
 	if (bTargeting)
 	{
-		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
 	else
 	{
