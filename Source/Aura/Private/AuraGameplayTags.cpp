@@ -35,5 +35,13 @@ namespace AuraGameplayTags
 	// Vital Attributes
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_VITAL_HEALTH, "Attributes.Vital.Health", "Amount of damage a player can take before death");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_ATTRIBUTES_VITAL_MANA, "Attributes.Vital.Mana", "A resource used to cast spells");
+	
+	// Input Tags
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_LMB, "InputTag.LMB", "Left Mouse Button");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_RMB, "InputTag.RMB", "Right Mouse Button");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_1, "InputTag.1", "Placeholder for InputTag.1, used for abilities or actions");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_2, "InputTag.2", "Placeholder for InputTag.2, used for abilities or actions");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_3, "InputTag.3", "Placeholder for InputTag.3, used for abilities or actions");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_INPUTTAG_4, "InputTag.4", "Placeholder for InputTag.4, used for abilities or actions");
 }
  
