@@ -196,7 +196,7 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(AuraGameplayTags::TAG_INPUTTAG_LMB.GetTag()))
 	{
-		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 
 		return;
 	}
