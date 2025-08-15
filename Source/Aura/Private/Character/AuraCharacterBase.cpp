@@ -72,7 +72,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	AuraASC->GetAllAbilities(AbilityHandles);
 	for (auto& Ability : AbilityHandles)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Ability: %s"), *Ability.ToString()));
+		UE_LOG(LogAuraCharacterBase, Log, TEXT("Ability: %s"), *Ability.ToString());
 	}
 
 
