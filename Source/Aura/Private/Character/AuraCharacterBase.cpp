@@ -65,7 +65,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 
 	for (auto& Ability : AuraASC->GetActivatableAbilities())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Ability: %s"), *Ability.GetDebugString()));
+		UE_LOG(LogAura, Log, TEXT("Ability: %s"), *Ability.GetDebugString());
 	}
 
 	TArray<FGameplayAbilitySpecHandle> AbilityHandles;
