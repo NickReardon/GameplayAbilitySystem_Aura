@@ -10,6 +10,8 @@
 AAuraProjectile::AAuraProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
+	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SetRootComponent(SphereComponent);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);

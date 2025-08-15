@@ -28,6 +28,11 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 	
 }
 
+FVector AAuraCharacterBase::GetCombatSocketLocation() const
+{
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 
 void AAuraCharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float Level) const
 {
