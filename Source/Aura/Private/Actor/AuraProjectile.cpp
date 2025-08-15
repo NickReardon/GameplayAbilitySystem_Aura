@@ -3,7 +3,6 @@
 
 #include "Actor/AuraProjectile.h"
 
-#include "Projects.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
