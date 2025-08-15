@@ -58,7 +58,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
 	if (!HasAuthority())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AddCharacterAbilities can only be called on the server!"));
+		UE_LOG(LogAuraCharacter, Warning, TEXT("AddCharacterAbilities can only be called on the server!"));
 		return;
 	}
 	AuraASC->AddCharacterAbilities(StartupAbilities);
