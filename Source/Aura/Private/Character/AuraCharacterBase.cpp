@@ -58,24 +58,22 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
 	if (!HasAuthority())
 	{
-		UE_LOG(LogAuraCharacter, Warning, TEXT("AddCharacterAbilities can only be called on the server!"));
+		UE_LOG(LogTemp, Warning, TEXT("AddCharacterAbilities can only be called on the server!"));
 		return;
 	}
 	AuraASC->AddCharacterAbilities(StartupAbilities);
 
 	for (auto& Ability : AuraASC->GetActivatableAbilities())
 	{
-		UE_LOG(LogAura, Log, TEXT("Ability: %s"), *Ability.GetDebugString());
+		UE_LOG(LogTemp, Log, TEXT("Ability: %s"), *Ability.GetDebugString());
 	}
 
 	TArray<FGameplayAbilitySpecHandle> AbilityHandles;
 	AuraASC->GetAllAbilities(AbilityHandles);
 	for (auto& Ability : AbilityHandles)
 	{
-		UE_LOG(LogAuraCharacterBase, Log, TEXT("Ability: %s"), *Ability.ToString());
+		UE_LOG(LogTemp, Log, TEXT("Ability: %s"), *Ability.ToString());
 	}
 
 
 }
-
-
