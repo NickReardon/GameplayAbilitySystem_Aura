@@ -7,6 +7,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Aura/Aura.h"
 #include "Components/AudioComponent.h"
 
 AAuraProjectile::AAuraProjectile()
@@ -16,13 +17,16 @@ AAuraProjectile::AAuraProjectile()
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SetRootComponent(SphereComponent);
+
+	SphereComponent->SetCollisionObjectType(ECC_Projectile);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SphereComponent->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 	SphereComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);
 	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	SphereComponent->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 
-
+	
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->InitialSpeed = 1000.f;
 	ProjectileMovementComponent->MaxSpeed = 1000.f;
