@@ -4,6 +4,7 @@
 #include "AbilitySystem/Abilties/AuraProjectileSpell.h"
 
 #include "Actor/AuraProjectile.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Interaction/CombatInterface.h"
 
@@ -37,14 +38,16 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 			ProjectileClass,
 			SpawnTransform,
 			GetOwningActorFromActorInfo(),
-			Cast<APawn>(GetOwningActorFromActorInfo()),
+			Cast<APawn>(GetAvatarActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		//TODO: Give the Projectile a Gameplay Effect Spec for causing Damage.
 
 
 		
+
 		Projectile->FinishSpawning(SpawnTransform);
+
 	}	
 }
 
