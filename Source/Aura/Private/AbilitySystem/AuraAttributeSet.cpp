@@ -46,7 +46,7 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxHealth());
 
 		
-		UE_LOG(LogTemp, Warning, TEXT("Health: %f"), GetHealth());
+		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), GetHealth());
 	}
 
 	// Mana attributes ---------------------------
@@ -55,7 +55,7 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 		// Ensure mana does not exceed max mana
 		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxMana());
 		
-		UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), GetMana());
+		//UE_LOG(LogTemp, Warning, TEXT("Mana: %f"), GetMana());
 	}
 
 
@@ -71,7 +71,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-		//UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute - Health: %f"), GetHealth());
+		UE_LOG(LogTemp, Warning, TEXT("Changed Health on %s, Health: %f"), *EffectProperties.TargetAvatarActor->GetName(), GetHealth());
 	}
 	if (Data.EvaluatedData.Attribute == GetMaxHealthAttribute())
 	{
