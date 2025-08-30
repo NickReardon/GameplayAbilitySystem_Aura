@@ -3,8 +3,8 @@
 
 #include "AbilitySystem/Abilties/AuraProjectileSpell.h"
 
+#include "AbilitySystemComponent.h"
 #include "Actor/AuraProjectile.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "Interaction/CombatInterface.h"
 
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -12,29 +12,40 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
                                            const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	const bool bIsServer = HasAuthority(&ActivationInfo);
 
+	
 
+}
+
+void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
+{
+
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	if (!bIsServer) return;
+	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
-
+		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+		Rotation.Pitch = 0.f;
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-		//TODO: Set the Projectile Rotation
+		SpawnTransform.SetRotation(Rotation.Quaternion());
 		
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
 			ProjectileClass,
 			SpawnTransform,
 			GetOwningActorFromActorInfo(),
-			Cast<APawn>(GetOwningActorFromActorInfo()),
+			Cast<APawn>(GetAvatarActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		//TODO: Give the Projectile a Gameplay Effect Spec for causing Damage.
-
+		const UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+		const FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle = EffectSpecHandle;
+		
 		Projectile->FinishSpawning(SpawnTransform);
-	}	
-	
 
+	}	
 }
+

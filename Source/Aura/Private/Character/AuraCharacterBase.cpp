@@ -5,12 +5,23 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Aura/Aura.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
+
+	
+	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -30,7 +41,9 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 
 FVector AAuraCharacterBase::GetCombatSocketLocation() const
 {
+	DrawDebugSphere(GetWorld(), GetMesh()->GetSocketLocation(WeaponTipSocketName), 10.f, 12, FColor::Red, false, 5.f);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	
 }
 
 
@@ -58,24 +71,22 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
 	if (!HasAuthority())
 	{
-		UE_LOG(LogAuraCharacter, Warning, TEXT("AddCharacterAbilities can only be called on the server!"));
+		UE_LOG(LogTemp, Warning, TEXT("AddCharacterAbilities can only be called on the server!"));
 		return;
 	}
 	AuraASC->AddCharacterAbilities(StartupAbilities);
 
 	for (auto& Ability : AuraASC->GetActivatableAbilities())
 	{
-		UE_LOG(LogAura, Log, TEXT("Ability: %s"), *Ability.GetDebugString());
+		UE_LOG(LogTemp, Log, TEXT("Ability: %s"), *Ability.GetDebugString());
 	}
 
 	TArray<FGameplayAbilitySpecHandle> AbilityHandles;
 	AuraASC->GetAllAbilities(AbilityHandles);
 	for (auto& Ability : AbilityHandles)
 	{
-		UE_LOG(LogAuraCharacterBase, Log, TEXT("Ability: %s"), *Ability.ToString());
+		UE_LOG(LogTemp, Log, TEXT("Ability: %s"), *Ability.ToString());
 	}
 
 
 }
-
-

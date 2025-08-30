@@ -77,6 +77,11 @@ void AAuraPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
+	
 	AuraInputComponent->BindAbilityActions(InputConfig, this,
 		&ThisClass::AbilityInputTagPressed,
 		&ThisClass::AbilityInputTagReleased,
@@ -87,10 +92,12 @@ void AAuraPlayerController::SetupInputComponent()
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = GetControlRotation();
+	const FRotator Rotation = PlayerCameraManager->GetCameraRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	
 
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
@@ -139,11 +146,10 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 
 		return;
 	}
-	if (bTargeting)
-	{
-		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
-	}
-	else
+	
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+	
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		if (FollowTime <= ShortPressThreshold)
 		{
@@ -200,7 +206,7 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 
 		return;
 	}
-	if (bTargeting)
+	if (bTargeting || bShiftKeyDown)
 	{
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
