@@ -48,9 +48,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
 	
-	// UPROPERTY()
-	// TObjectPtr<UAttributeMenuWidgetController> Enem
-	//
-	// UPROPERTY(EditAnywhere)
-	// TSubclassOf<UAttributeMenuWidgetController> AttributeMenuWidgetControllerClass;
 };
