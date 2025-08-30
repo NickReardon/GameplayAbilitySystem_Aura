@@ -97,7 +97,7 @@ void AAuraProjectile::HandleImpactEffects()
 
 void AAuraProjectile::Destroyed()
 {
-	if (!bHit and !HasAuthority())
+	if (!bHit && !HasAuthority())
 	{
 		HandleImpactEffects();
 	}
